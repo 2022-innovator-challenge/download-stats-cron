@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: downloadstats-cron
+spec:
+  schedule: '*/5 * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: downloadstats
+              image: kyma-ic-2022.common.repositories.cloud.sap/i824643/downloadstats-cron:latest
+              imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: kyma-artifactory-registry
