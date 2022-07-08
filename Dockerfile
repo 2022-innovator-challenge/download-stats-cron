@@ -1,10 +1,9 @@
 FROM node:18
 
-
-
 # Create app directory
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/google-chrome
 
 RUN useradd cron -U -d /home/cron
 RUN mkdir /home/cron
@@ -36,9 +35,6 @@ RUN npm ci
 # Bundle app source
 COPY . .
 RUN npx tsc
-
-# If you are building your code for production
-# RUN npm ci --only=production
 
 USER cron
 

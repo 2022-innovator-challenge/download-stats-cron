@@ -35,38 +35,35 @@ async function getAllStats(page) {
   );
 }
 
-async function getBodyForPackageStats(packageName, packgeStats) {
-  for (const [version, downloads] of Object.entries(packgeStats)) {
-    const body = {
-      package: packageName,
-      version,
-      downloads
-    };
-
-    console.log(body);
-
-    // await axios.request({
-    //   method: 'post',
-    //   url: 'https://downloadstats.c2aecf0.kyma.ondemand.com/download-stats',
-    //   data: body
-    // });
-  }
+function getBodyForPackageStats(packageName, packageStats) {
+  return Object.entries(packageStats).map(([version, downloads]) => ({
+    package: packageName,
+    version,
+    downloads
+  }));
 }
 
 async function main() {
-  const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/google-chrome'
-  });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  // eslint-disable-next-line no-console
   const stats = await getAllStats(page);
-  console.log(stats);
 
-  for (const [packageName, packageStats] of Object.entries(stats)) {
-    await getBodyForPackageStats(packageName, packageStats);
+  const data = Object.entries(stats).flatMap(([packageName, packageStats]) =>
+    getBodyForPackageStats(packageName, packageStats)
+  );
+
+  try {
+    await axios.request({
+      method: 'post',
+      url: 'http://downloadstats-service:3000/download-stats/bulk',
+      data
+    });
+  } catch (err) {
+    console.error('Failed to update download stats.');
+    throw err;
+  } finally {
+    await browser.close();
   }
-
-  await browser.close();
 }
 
 main();

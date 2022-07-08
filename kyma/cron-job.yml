@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: downloadstats-cron
 spec:
-  schedule: '*/5 * * * *'
+  schedule: '0 3 * * MON'
   jobTemplate:
     spec:
       template:
@@ -11,7 +11,7 @@ spec:
           containers:
             - name: downloadstats
               image: kyma-ic-2022.common.repositories.cloud.sap/i824643/downloadstats-cron:latest
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
           restartPolicy: OnFailure
           imagePullSecrets:
             - name: kyma-artifactory-registry
