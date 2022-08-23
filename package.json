@@ -19,7 +19,8 @@
   "homepage": "https://github.com/2022-innovator-challenge/download-stats-cron#readme",
   "dependencies": {
     "axios": "^0.27.2",
-    "puppeteer": "^15.0.2"
+    "puppeteer": "^15.0.2",
+    "undici": "^5.9.1"
   },
   "devDependencies": {
     "ts-node": "^10.8.1",

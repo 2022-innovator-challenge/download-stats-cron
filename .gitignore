@@ -1,1 +1,4 @@
 node_modules
+/zips
+/get-old-data.ts
+/data.json
